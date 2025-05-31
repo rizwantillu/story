@@ -1,0 +1,88 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>Love Letter for TuTu</title>
+  <link href="https://fonts.googleapis.com/css2?family=Great+Vibes&display=swap" rel="stylesheet" />
+  <style>
+    body {
+      background-color: #fff0f5;
+      font-family: 'Great Vibes', cursive;
+      font-size: 28px;
+      color: #b30059;
+      padding: 60px 20px;
+      line-height: 1.8;
+      text-align: center;
+    }
+    .letter-container {
+      max-width: 800px;
+      margin: 0 auto;
+      background: #fff;
+      padding: 40px;
+      border-radius: 20px;
+      box-shadow: 0 10px 30px rgba(176, 0, 58, 0.2);
+      min-height: 200px;
+    }
+    button {
+      margin-top: 30px;
+      padding: 12px 30px;
+      font-size: 18px;
+      font-family: 'Poppins', sans-serif;
+      font-weight: 600;
+      background-color: #b0003a;
+      color: white;
+      border: none;
+      border-radius: 35px;
+      cursor: pointer;
+      box-shadow: 0 6px 20px rgba(176, 0, 58, 0.3);
+      transition: background 0.3s ease;
+    }
+    button:hover {
+      background-color: #7a003c;
+    }
+  </style>
+</head>
+<body>
+  <div class="letter-container" id="letterContainer">
+    <!-- Paragraphs will appear here step by step -->
+  </div>
+
+  <button id="nextBtn">Next</button>
+
+  <script>
+    const paragraphs = [
+      "Hey Chanchal,",
+      "I hope your birthday goes soooo well and sooo good. I know I can't provide you luxuries right now, but I always wish that I can do everything for you. So, doing it right now...",
+      "Let me tell you how much I love you. You know when we met and played games together, I intentionally edited your gameplays. I was so impressed by you, by your nature. I mean, I can't explain what I felt for you—you were the perfect girl I could ever get.",
+      "So basically, I just wanna say Happy Birthday my Buddhu. I love you, my TuTu... or kya bolu hihihihi... Toyi Toyi Tarlo TuTu.",
+      "Yours beloved,<br>Totu sa baby Tafwan ❤️"
+    ];
+
+    let currentIndex = 0;
+    const container = document.getElementById('letterContainer');
+    const btn = document.getElementById('nextBtn');
+
+    function showNext() {
+      if (currentIndex < paragraphs.length) {
+        // Append next paragraph with spacing
+        const p = document.createElement('p');
+        p.innerHTML = paragraphs[currentIndex];
+        container.appendChild(p);
+        currentIndex++;
+        // Scroll down as paragraphs add
+        window.scrollTo(0, document.body.scrollHeight);
+
+        if (currentIndex === paragraphs.length) {
+          btn.textContent = "That's all ❤️";
+          btn.disabled = true;
+        }
+      }
+    }
+
+    btn.addEventListener('click', showNext);
+
+    // Show first paragraph on page load
+    showNext();
+  </script>
+</body>
+</html>
