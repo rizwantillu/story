@@ -1,0 +1,394 @@
+Put your HTML text here<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>🌸 Our Love Tree</title>
+  <link rel="icon" href="https://emojiapi.dev/api/v1/heart_eyes/64.png" type="image/png">
+  <link href="https://fonts.googleapis.com/css2?family=Open+Sans&family=Poppins:wght@600&display=swap" rel="stylesheet" />
+  <style>
+    * { box-sizing: border-box; }
+    body {
+      margin: 0; padding: 0;
+      font-family: 'Open Sans', sans-serif;
+      background-color: #fff0f6;
+      color: #222;
+      overflow-x: hidden;
+    }
+    h1 {
+      text-align: center;
+      font-family: 'Poppins', sans-serif;
+      font-size: 42px;
+      margin: 40px 0;
+      color: #b0003a;
+      animation: fadeInDown 2s ease-in-out;
+    }
+
+    .timeline {
+      position: relative;
+      max-width: 1200px;
+      margin: auto;
+      padding: 20px 0;
+      display: none;
+      animation: fadeIn 2s ease-in;
+    }
+    .timeline::after {
+      content: '';
+      position: absolute;
+      width: 6px;
+      background-color: #b0003a;
+      top: 0;
+      bottom: 0;
+      left: 50%;
+      margin-left: -3px;
+    }
+    .entry {
+      padding: 20px 30px;
+      position: relative;
+      background: #fff;
+      border-radius: 10px;
+      width: 45%;
+      box-shadow: 0 6px 20px rgba(176, 0, 58, 0.15);
+      cursor: pointer;
+      margin-bottom: 30px;
+      transition: max-height 0.5s ease, background 0.3s ease;
+      overflow: hidden;
+      max-height: 60px;
+      opacity: 0;
+      animation: fadeUp 1.2s ease forwards;
+    }
+    .entry:nth-child(even) { animation-delay: 0.5s; }
+    .entry:nth-child(odd) { animation-delay: 0.2s; }
+    .entry.left { left: 0; }
+    .entry.right { left: 55%; }
+    .entry::before {
+      content: "💖";
+      position: absolute;
+      width: 25px;
+      height: 25px;
+      right: -13px;
+      top: 15px;
+      background-color: #b0003a;
+      color: white;
+      border-radius: 50%;
+      text-align: center;
+      line-height: 25px;
+      font-size: 16px;
+      animation: pulse 2s infinite;
+      transition: transform 0.4s ease, box-shadow 0.4s ease;
+      z-index: 10;
+    }
+    .entry.right::before { left: -13px; right: auto; }
+    .entry h3 {
+      margin-top: 0;
+      color: #b0003a;
+      font-size: 22px;
+      font-family: 'Poppins', sans-serif;
+    }
+    .entry p {
+      margin: 10px 0 0;
+      opacity: 0;
+      transition: opacity 0.5s ease;
+      font-size: 16px;
+      line-height: 1.5;
+      color: #444;
+    }
+    .entry.expanded {
+      max-height: 500px;
+      background: #fff0f6;
+    }
+    .entry.expanded p { opacity: 1; }
+
+    .footer {
+      text-align: center;
+      font-size: 16px;
+      margin: 40px 0;
+      color: #666;
+      display: none;
+      font-family: 'Open Sans', sans-serif;
+      animation: fadeIn 2s ease;
+    }
+
+    audio {
+      position: fixed;
+      bottom: 20px;
+      left: 50%;
+      transform: translateX(-50%);
+      z-index: 1000;
+      display: none;
+    }
+
+    @media screen and (max-width: 768px) {
+      .entry {
+        width: 90%;
+        left: 0 !important;
+        margin-left: 5%;
+      }
+      .entry.right::before,
+      .entry.left::before {
+        left: 50%;
+        transform: translateX(-50%);
+      }
+    }
+
+    #lockscreen {
+      position: fixed;
+      top: 0; left: 0; right: 0; bottom: 0;
+      background-color: #ffdeeb;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+      color: #7a003c;
+      font-family: 'Poppins', sans-serif;
+      z-index: 2000;
+      padding: 20px;
+      text-align: center;
+    }
+    #lockscreen h2 { font-size: 38px; margin-bottom: 20px; }
+    #lockscreen p {
+      font-weight: 600;
+      font-size: 18px;
+      margin-bottom: 10px;
+      color: #7a003c;
+    }
+    #lockscreen input[type="text"] {
+      padding: 12px 18px;
+      font-size: 20px;
+      border-radius: 30px;
+      border: 2px solid #b0003a;
+      width: 280px;
+      max-width: 90vw;
+      text-align: center;
+      outline: none;
+      font-weight: 600;
+      color: #7a003c;
+      background-color: #fff0f6;
+      transition: border-color 0.3s ease;
+    }
+    #lockscreen input[type="text"]:focus {
+      border-color: #e91e63;
+      background-color: #fff;
+    }
+    #lockscreen button {
+      margin-top: 20px;
+      padding: 14px 35px;
+      font-size: 22px;
+      background: #b0003a;
+      border: none;
+      color: white;
+      border-radius: 35px;
+      cursor: pointer;
+      font-weight: 700;
+      transition: background 0.3s ease;
+    }
+    #lockscreen button:hover {
+      background: #7a003c;
+    }
+    #error-message {
+      margin-top: 15px;
+      color: #d32f2f;
+      font-weight: 700;
+      height: 24px;
+      font-size: 16px;
+    }
+
+    #finalMessage {
+      display: none;
+      background: #fff0f6;
+      padding: 30px;
+      border-radius: 20px;
+      text-align: center;
+      margin: 40px auto;
+      width: 90%;
+      max-width: 600px;
+      box-shadow: 0 6px 30px rgba(176,0,58,0.2);
+      font-family: 'Poppins', sans-serif;
+      animation: fadeIn 2s ease;
+    }
+
+    .falling-heart {
+      position: fixed;
+      top: -50px;
+      font-size: 24px;
+      animation: fall linear infinite;
+      z-index: 100;
+    }
+    @keyframes fall {
+      to {
+        transform: translateY(110vh) rotate(360deg);
+        opacity: 0;
+      }
+    }
+
+    /* Cover Page */
+    #coverPage {
+      position: fixed;
+      top: 0; left: 0; right: 0; bottom: 0;
+      background: linear-gradient(to bottom, #ffe0f0, #ffffff);
+      display: flex; flex-direction: column;
+      justify-content: center; align-items: center;
+      text-align: center;
+      z-index: 3000;
+      font-family: 'Poppins', sans-serif;
+      color: #b0003a;
+      animation: fadeIn 2s ease;
+    }
+    #coverPage h1 { font-size: 36px; margin-bottom: 15px; }
+    #coverPage p { font-size: 20px; font-weight: 600; }
+
+    /* Animations */
+    @keyframes fadeIn {
+      from { opacity: 0; transform: translateY(20px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+    @keyframes fadeUp {
+      from { opacity: 0; transform: translateY(50px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+    @keyframes fadeInDown {
+      from { opacity: 0; transform: translateY(-30px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+    @keyframes pulse {
+      0% { transform: scale(1); }
+      50% { transform: scale(1.3); }
+      100% { transform: scale(1); }
+    }
+
+    /* New hover effect */
+    .entry:hover {
+      background-color: #ffe6ef;
+      transform: scale(1.03) rotateZ(-0.3deg);
+      box-shadow: 0 12px 35px rgba(176, 0, 58, 0.35);
+      transition: all 0.4s ease-in-out;
+      border: 2px dashed #b0003a;
+    }
+    .entry:hover::before {
+      animation: heartbeat 1s infinite;
+      box-shadow: 0 0 8px 3px #ffb6c1;
+      transform: scale(1.6) rotate(10deg);
+    }
+
+    @keyframes heartbeat {
+      0% { transform: scale(1.6) rotate(10deg); }
+      25% { transform: scale(1.8) rotate(0deg); }
+      50% { transform: scale(1.6) rotate(-10deg); }
+      75% { transform: scale(1.8) rotate(0deg); }
+      100% { transform: scale(1.6) rotate(10deg); }
+    }
+  </style>
+</head>
+<body>
+
+  <div id="coverPage">
+    <h1>🌸 Happy Birthday, My Tutu!</h1>
+    <p>Tap to Begin the Journey 💖</p>
+  </div>
+
+  <div id="lockscreen">
+    <h2>Answer to Unlock Our Love Tree</h2>
+    <p>What is the special nickname I gave you? (Hint: It's cute!)</p>
+    <input type="text" id="answerInput" autocomplete="off" placeholder="Type your answer here" />
+    <button id="unlockBtn">Unlock</button>
+    <div id="error-message"></div>
+  </div>
+
+  <h1>Our Love Tree</h1>
+  <div class="timeline">
+    <!-- Original memory entries go here (unchanged) -->
+    <div class="entry left"><h3>How It All Began</h3><p>We met through someone from your past...</p></div>
+    <div class="entry right"><h3>October 2 — The First Spark</h3><p>I said, “Chanchal, I like you.”...</p></div>
+    <div class="entry left"><h3>The Uno Reverse Night</h3><p>We shared everything. I asked...</p></div>
+    <div class="entry right"><h3>Faith & Your Bravery</h3><p>I told you I could only marry a Muslim...</p></div>
+    <div class="entry left"><h3>Chunnu & Munnu</h3><p>We dreamed of two little kids...</p></div>
+    <div class="entry right"><h3>Baby Talk & Nicknames</h3><p>I became Totu. You became my Tutu...</p></div>
+    <div class="entry left"><h3>Fights & Making Up</h3><p>Sometimes I hurt you. My anger...</p></div>
+    <div class="entry right"><h3>Distance Never Stopped Us</h3><p>You came back close. We planned...</p></div>
+    <div class="entry left"><h3>Your Birthday — My Special Wish</h3><p>Basically now it's your birthday...</p></div>
+  </div>
+
+  <div class="footer">With my entire heart, your Totu ❤️</div>
+
+  <div id="finalMessage">
+    <h2>🎁 For My Tutu</h2>
+    <p>You're the best gift in my life. This is just a small token of how much I adore you. Love you forever, my pink paw cat. 🐾💘</p>
+  </div>
+
+  <audio autoplay loop controls>
+    <source src="https://cdn.pixabay.com/download/audio/2022/03/14/audio_0fdfde27c4.mp3?filename=sakura-girl-daisy-21346.mp3" type="audio/mpeg" />
+  </audio>
+
+  <script>
+    document.getElementById('coverPage').addEventListener('click', () => {
+      document.getElementById('coverPage').style.display = 'none';
+    });
+
+    document.addEventListener('DOMContentLoaded', () => {
+      const entries = document.querySelectorAll('.entry');
+      entries.forEach(entry => {
+        entry.addEventListener('click', () => {
+          entry.classList.toggle('expanded');
+        });
+      });
+
+      const lockscreen = document.getElementById('lockscreen');
+      const unlockBtn = document.getElementById('unlockBtn');
+      const answerInput = document.getElementById('answerInput');
+      const errorMessage = document.getElementById('error-message');
+      const correctAnswer = 'tutu';
+
+      unlockBtn.addEventListener('click', () => {
+        const userAnswer = answerInput.value.trim().toLowerCase();
+        if (userAnswer === correctAnswer) {
+          lockscreen.style.display = 'none';
+          document.querySelector('.timeline').style.display = 'block';
+          document.querySelector('.footer').style.display = 'block';
+          document.querySelector('audio').style.display = 'block';
+          document.getElementById('finalMessage').style.display = 'block';
+        } else {
+          errorMessage.textContent = 'Oops! That’s not it. Try again, my love.';
+        }
+      });
+
+      // Falling hearts
+      function createHeart() {
+        const heart = document.createElement('div');
+        heart.classList.add('falling-heart');
+        heart.textContent = '💗';
+        heart.style.left = Math.random() * 100 + 'vw';
+        heart.style.animationDuration = (3 + Math.random() * 2) + 's';
+        document.body.appendChild(heart);
+        setTimeout(() => heart.remove(), 5000);
+      }
+      setInterval(createHeart, 300);
+    });
+  </script>
+<style>
+  .love-note-btn {
+    display: block;
+    margin: 40px auto 60px;
+    padding: 15px 30px;
+    font-size: 20px;
+    background-color: #b0003a;
+    color: #fff;
+    border: none;
+    border-radius: 35px;
+    cursor: pointer;
+    font-family: 'Poppins', sans-serif;
+    font-weight: 600;
+    box-shadow: 0 6px 20px rgba(176, 0, 58, 0.3);
+    transition: background 0.3s ease;
+  }
+
+  .love-note-btn:hover {
+    background-color: #7a003c;
+  }
+</style>
+
+<button class="love-note-btn" onclick="window.location.href='love-letter.html'">
+  There's more for you TuTu!!! 💌
+</button>
+
+</body>
+</html>
